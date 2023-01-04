@@ -1,47 +1,47 @@
-import React, { useState, Component, useEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import LoginScreen from './src/LoginScreen';
+import { View, Text, StyleSheet, Button } from 'react-native';
+import { User } from '@firebase/auth-types';
 
-import createExercise from './test';
-import { Set, Exercise } from './backend/models';
+import auth from './src/firebase';
 
-const set1: Set = {
-  repetitions: 8,
-  weight: 80,
-  rest: 60
+const App = () => {
+  const [user, setUser] = React.useState<User | null>(null);
 
-}
-const exercise: Exercise = {
-  name: 'Deadlift',
-  date: Date.UTC.toString(),
-  sets: [set1]
-};
+  React.useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user: User | null) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
-export default function App() {
+  const handleLogout = () => {
+    auth.signOut();
+    console.log(user?.email + ' logged out');
 
-  const [test1, setTest1] = useState("");
+  };
 
-  const onScreenLoad = () => {
-    setTest1(createExercise(exercise));
+  if (user) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Hello, {user.email}!</Text>
+        <Button title="Logout" onPress={handleLogout} />
+      </View>
+    );
+  } else {
+    return <LoginScreen />;
   }
-  useEffect(() => {
-    onScreenLoad();
-  }, [])
-
-
-  return (
-    <View style={styles.container}>
-      <Text>{test1}</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 20,
   },
 });
+
+export default App;
