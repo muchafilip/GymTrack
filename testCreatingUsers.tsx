@@ -30,10 +30,25 @@ async function createTestUser(username: string) {
     }
 
 }
-let usernames = ["mary", "phil", "max", "eva"];
 
-for (let index = 0; index < usernames.length; index++) {
-    createTestUser(usernames[index]);
+async function createSet() {
+    try {
+        const docRef = await addDoc(collection(db, "sets"), {
+            weight: 100,
+            repetitions: 8,
+            restInSeconds: 90
+        });
+        console.log(`Document written with ID: ${docRef.id}, ${docRef.path}, ${docRef.type}`);
+        return docRef.id;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+
+}
+
+for (let index = 0; index < 4; index++) {
+    createSet();
+    console.log(index)
 }
 
 
