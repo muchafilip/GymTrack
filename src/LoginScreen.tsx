@@ -24,7 +24,6 @@ const LoginScreen = () => {
 
   };
 
-
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -56,6 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'silver'
   },
   input: {
     height: 40,
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8,
+    backgroundColor: 'white'
   },
   errorText: {
     color: 'red',
